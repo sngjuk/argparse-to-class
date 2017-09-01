@@ -22,7 +22,7 @@ python arg2cls.py [target.py] [target2.py(optional)] ...
 
 
 
-###Make argument parser into
+### Make argument parser into
 ```
 parser = argparse.ArgumentParser(description='PyTorch PennTreeBank RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/penn',
@@ -35,7 +35,7 @@ parser.add_argument('--nhid', type=int, default=200,
                     help='number of hidden units per layer')
 args = parser.parse_args()
 ```
-###Class format!
+### Class format!
 ```
 class args:
     data = './data/penn'
