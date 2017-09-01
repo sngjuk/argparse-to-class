@@ -23,7 +23,7 @@ python arg2cls.py [target.py] [target2.py(optional)] ...
 
 
 ### Make argument parser into
-'''
+```
 parser = argparse.ArgumentParser(description='PyTorch PennTreeBank RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/penn',
                     help='location of the data corpus')
@@ -34,13 +34,13 @@ parser.add_argument('--emsize', type=int, default=200,
 parser.add_argument('--nhid', type=int, default=200,
                     help='number of hidden units per layer')
 args = parser.parse_args()
-'''
+```
 ### class format
-'''
+```
 class args:
     data = './data/penn'
     model = 'LSTM'
     emsize = 200
     nhid = 200
-'''
+```
 
