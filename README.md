@@ -28,12 +28,12 @@ class args:
     nhid = 200
 ```
 
-### Example Source file (with argparse) :
+### Example source file (with argparse) :
 
 ![alt text](http://thumbnail.egloos.net/600x0/http://pds21.egloos.com/pds/201709/01/00/c0134200_59a9363cd1dfc.png)
 
 
-### Example Ouput :
+### Example ouput :
 
 ![alt text](http://thumbnail.egloos.net/600x0/http://pds25.egloos.com/pds/201709/01/00/c0134200_59a936974c78f.png)
 
