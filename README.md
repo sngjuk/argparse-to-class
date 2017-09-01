@@ -19,7 +19,7 @@ parser.add_argument('--nhid', type=int, default=200,
                     help='number of hidden units per layer')
 args = parser.parse_args()
 ```
-### Class format!
+### Class format !
 ```
 class args:
     data = './data/penn'
