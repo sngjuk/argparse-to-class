@@ -16,7 +16,7 @@ python arg2cls.py [target.py] [target2.py(optional)] ...
 ![alt text](http://thumbnail.egloos.net/600x0/http://pds25.egloos.com/pds/201709/01/00/c0134200_59a936974c78f.png)
 
 
-### substituted code : 
+### Substituted code : 
 If there's no default value for argument, It will have warning value. (###manual_setting_required###)
 
 ![alt text](http://pds21.egloos.com/pds/201709/01/00/c0134200_59a937f65f737.png)
