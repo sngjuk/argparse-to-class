@@ -30,7 +30,7 @@ class args:
 
 ### Example source (with argparse) :
 
-![alt text](http://thumbnail.egloos.net/600x0/http://pds21.egloos.com/pds/201709/01/00/c0134200_59a9363cd1dfc.png)
+![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
 
 ### Example ouput :
