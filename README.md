@@ -1,6 +1,6 @@
 # Argparse_to_class for Jupyter execution
 
-Simple argparse transform into class format for Jupyter notebook users. (due to Jupyter argv argument passing problem)
+Simple argparse transform into class format for Jupyter notebook users. (due to Jupyter argv argument passing problem)__
 Just copy and paste to substitute argparse code. So you don't need to change internal code.
 
 ### Usage : 
