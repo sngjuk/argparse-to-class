@@ -9,7 +9,6 @@ for fname in sys.argv:
     print(fname)
     try :
         with open(fname, 'r') as f:
-            
             txt = f.read()
             t = txt.split('argparse.ArgumentParser')
             if len(t) <2:
@@ -21,7 +20,6 @@ for fname in sys.argv:
 
             name=[]
             val=[]
-
             for i, x in enumerate(t):
                 t =x.split('--')[1]
                 name.append(t.split('\'')[0].replace('-','_'))
@@ -40,5 +38,3 @@ for fname in sys.argv:
 
     except IOError:
         print('IOError : Maybe no such file.', fname)
-
-
