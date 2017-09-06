@@ -1,7 +1,7 @@
 # Argparse_to_class for Jupyter execution
 
 Simple argparse to class transformation script for Jupyter notebook execution. (argument passing is kind of work in Jupyter)<br />
-Just copy & paste class-transformed code to replace Argparse-code, when you just want to run script in Jupyter. <br/>
+Just copy & paste class-transformed code to replace argparse-code, when you just want to run script in Jupyter. <br/>
 So you don't need to change internal code.
 
 ### Usage : 
