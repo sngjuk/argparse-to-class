@@ -27,7 +27,6 @@ for fname in sys.argv:
                 if('type' in t):
                 	dtype = t.split('type=')[1].split(',')[0]
 
-                
                 dfult = t.split('default=')
                 if len(dfult) <2:
                     val.append('###manual_setting_required###')
