@@ -23,11 +23,18 @@ for fname in sys.argv:
             for i, x in enumerate(t):
                 t =x.split('--')[1]
                 name.append(t.split('\'')[0].replace('-','_'))
+                dtype = ''
+                if('type' in t):
+                	dtype = t.split('type=')[1].split(',')[0]
+
+                
                 dfult = t.split('default=')
                 if len(dfult) <2:
                     val.append('###manual_setting_required###')
+                elif (dtype in ['int','float','long']):
+                	val.append(dfult[1].split(',')[0].replace('\'',''))
                 else:
-                    val.append(dfult[1].split(',')[0].replace('-','_'))
+                    val.append(dfult[1].split(',')[0])
 
             print('')
             print('class args:')
