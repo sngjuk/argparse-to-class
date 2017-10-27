@@ -10,7 +10,8 @@ def transform():
 
     sys.argv.pop(0)
     for fname in sys.argv:
-        print(fname)
+        if(__name__!='__main__'):
+            print(fname)
         try :
             with open(fname, 'r') as f:
                 txt = f.read()
