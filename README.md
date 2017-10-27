@@ -4,6 +4,9 @@ Simple argparse to class transformation script for Jupyter notebook execution. (
 Just copy & paste class-transformed code to replace argparse-code, when you just want to run script in Jupyter. <br/>
 So you don't need to change internal code.
 
+### Online transform :
+http://35.192.144.192:8000/arg2cls.html
+
 ### Usage : 
 python arg2cls.py [target.py] [target2.py(optional)] ...
 
