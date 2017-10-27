@@ -1,4 +1,4 @@
-# Argparse_to_class for Jupyter execution
+# Argparse to class for Jupyter execution
 
 Simple argparse to class transformation script for Jupyter notebook execution. (for quick testing in .ipynb)<br />
 Just copy & paste class-transformed code to replace argparse-code, when you just want to run script in Jupyter. <br/>
