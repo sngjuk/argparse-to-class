@@ -5,7 +5,7 @@ import sys
 
 def transform():
     if len(sys.argv) <2:
-        print('Usage : python arg2cls.py [target.py] [target2.py(optional)] ...')
+        print('Usage : python arg2cls.py target.py target2.py(optional) ...')
         sys.exit(0)
 
     sys.argv.pop(0)
