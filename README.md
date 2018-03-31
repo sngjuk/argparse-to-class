@@ -1,6 +1,6 @@
 # Argparse2class for Jupyter execution.
 
-ArgumentParser transformation for Jupyter execution. (for quick testing in .ipynb)<br />
+Argparse transformation for Jupyter execution. (for quick testing in .ipynb)<br />
 Copy & paste class-transformed argument class to replace parser <br/>
 
 ### Online quick transformation :
