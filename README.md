@@ -7,9 +7,9 @@ Copy & paste class-transformed code to replace argparse. <br/>
 http://35.192.144.192:8000/arg2cls.html
 
 ### Usage : 
-'''
+```
 python arg2cls.py [target.py] [target2.py(optional)] ...
-'''
+```
 
 ### Make argument parser into..
 ```
