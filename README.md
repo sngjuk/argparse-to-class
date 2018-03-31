@@ -33,12 +33,12 @@ class args:
     nhid = 200
 ```
 
-### Example Input (with argparse) :
+### Input (sourcecode with argparse) :
 
 ![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
 
-### Example Ouput :
+### Ouput :
 
 ![alt text](http://thumbnail.egloos.net/600x0/http://pds25.egloos.com/pds/201709/01/00/c0134200_59a936974c78f.png)
 
