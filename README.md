@@ -33,17 +33,17 @@ class args:
     nhid = 200
 ```
 
-### Input (sourcecode with argparse) :
+### Input (Source with argparse) :
 
 ![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
 
-### Ouput :
+### Ouput (args class) :
 
 ![alt text](http://thumbnail.egloos.net/600x0/http://pds25.egloos.com/pds/201709/01/00/c0134200_59a936974c78f.png)
 
 
-### Transformed args : 
+### Transformed usage : 
 If there's no default value for argument, It will have warning value. (###manual_setting_required###)
 
 ![alt text](http://pds21.egloos.com/pds/201709/01/00/c0134200_59a937f65f737.png)
