@@ -33,7 +33,7 @@ class args:
     nhid = 200
 ```
 
-### Example source (with argparse) :
+### Example Input (with argparse) :
 
 ![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
