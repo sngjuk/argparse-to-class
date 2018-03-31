@@ -38,12 +38,12 @@ class args:
 ![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
 
-### Example ouput :
+### Example Ouput :
 
 ![alt text](http://thumbnail.egloos.net/600x0/http://pds25.egloos.com/pds/201709/01/00/c0134200_59a936974c78f.png)
 
 
-### Substituted code : 
+### Transformed args : 
 If there's no default value for argument, It will have warning value. (###manual_setting_required###)
 
 ![alt text](http://pds21.egloos.com/pds/201709/01/00/c0134200_59a937f65f737.png)
