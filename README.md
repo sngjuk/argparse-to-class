@@ -1,7 +1,7 @@
 # Argparse2class for Jupyter execution.
 
-Argparse transformation for Jupyter ipython notebook execution. (for quick testing in .ipynb)<br />
-Copy & paste class-transformed code to replace argparse. <br/>
+ArgumentParser transformation for Jupyter execution. (for quick testing in .ipynb)<br />
+Copy & paste class-transformed argument class to replace parser <br/>
 
 ### Online quick transformation :
 http://35.192.144.192:8000/arg2cls.html
@@ -33,7 +33,7 @@ class args:
     nhid = 200
 ```
 
-### Input (Source with argparse) :
+### Input (Source with argument parser) :
 
 ![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
