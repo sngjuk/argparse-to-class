@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<b>Note:</b> May not supported in IE. <br>
+<b>Updated:</b> set_defaults & long arguemtns bug fix. 31/Mar/18 <br>
+<a href="https://github.com/sngjuk/Argparse_to_class">github page</a>
+<br>
+
+<form action="/action_page.php" id="usrform"  method="post">
+
+        <textarea rows="40" cols="70" name="comment">Enter text here..</textarea>
+        <input type="submit" value="submit">  
+</form>
+
+<b>Example Input : </b>
+
+
+<!--
+<button type="button" onclick="myFunction()">submit</button>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("comment").value;
+    document.getElementById("demo").innerHTML = x;
+}
+</script>
+
+<p id="demo"  > </p>
+//-->
+
+<p>
+<u>parser = argparse.ArgumentParser(description='PyTorch PennTreeBank RNN/LSTM Language Model') </u> <br>
+parser.add_argument('--data', type=str, default='./data/penn',<br>
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;                 help='location of the data corpus')<br>
+
+parser.add_argument('--model', type=str, default='LSTM',<br>
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;                    help='type of recurrent net (RNN_TANH, RNN_RELU, LSTM, GRU)')<br>
+parser.add_argument('--emsize', type=int, default=200,<br>
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;                    help='size of word embeddings')<br>
+parser.add_argument('--nhid', type=int, default=200,<br>
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;                    help='number of hidden units per layer')<br>
+<u>args = parser.parse_args() </u><br> </p>
+
+</body>
+</html>
