@@ -11,6 +11,9 @@
 
         echo nl2br($output);
 
+        // optional usage for logging queries.
+        /*
         $command2 = escapeshellcmd('./hist.py');
         shell_exec($command2);
+        */
 ?>
