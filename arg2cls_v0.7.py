@@ -63,14 +63,11 @@ def transform():
               if (dtype in ['int','float','long']):
                 tval = re.split(EqualPatt, dfult[1])[1]  
                 tval = RpRegex.split(tval)[0]
-                
                 if LcRegex.search(tval):
                   tval = LcRegex.split(tval)[1]
                 tval = CmRegex.split(tval)[0]
-                
                 if RcRegex.search(tval):
                   tval = RcRegex.split(tval)[0]
-                
                 argDct[aname] = tval
             
               else:
