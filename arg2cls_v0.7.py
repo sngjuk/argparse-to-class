@@ -17,6 +17,7 @@ LcRegex = re.compile('\'\s{0,}')
 RcRegex = re.compile('\s{0,}\'')
 DdRegex = re.compile('\s{0,}--*')
 CmRegex = re.compile('\s{0,},\s{0,}')
+NlRegexStr = '\s{0,}\n{0,}\s{0,}'
 
 def transform():
   if len(sys.argv) <2:
@@ -36,6 +37,16 @@ def transform():
         # filter empty line
         t = [x for x in t if not WsPatt.match(x)]
 
+        # handling multiple lined arguments.
+        empl = []
+        for i, z in reversed(list(enumerate(t))):
+          if i>0 and not ArgPatt.search(t[i]):
+            t[i-1] += t[i]
+            t[i-1]=re.sub(NlRegexStr,'',t[i-1])
+            empl.append(t[i])
+        for d in empl:
+          t.remove(d)
+
         argDct=OrderedDict()
         for i, x in enumerate(t):
           if not ArgPatt.search(x):
@@ -43,13 +54,10 @@ def transform():
 
           #add_argument()
           if add_argument_Patt.search(x) :
-
             t = LpRegex.split(x)[1]
             tname = RcRegex.split( LcRegex.split(t)[1] )[0]
-
             if DdRegex.search(tname):
               tname = tname.replace('--','')
-
             aname = tname.replace('-','_')
             argDct[aname]=''
             dtype = ''
@@ -70,7 +78,6 @@ def transform():
                 argDct[aname] = tval
             
               else:
-                #argDct[aname]=dfult[1].split('=')[1].split(')')[0].split(',')[0]
                 tval = re.split(EqualPatt, dfult[1])[1]
                 tval = RpRegex.split(tval)[0]
                 tval = CmRegex.split(tval)[0]
