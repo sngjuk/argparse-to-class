@@ -3,9 +3,9 @@
 Argparse transformation for Jupyter execution. (for quick testing in .ipynb)<br />
 Copy & paste class-transformed argument class to replace parser <br/>
 
-Currently only supports <b>add_argument()</b> & <b>set_defaults() </b>
-
-#### update: set_defaults & long arguments error fix. 31/Mar/18
+If you find some buggy outputs please mail me : <u> sngjuk@gmail.com </u>
+### update : Reliability & bugfix updated.
+update: set_defaults & long arguments error fix. 31/Mar/18
 
 ### Online quick transformation :
 http://35.192.144.192:8000/arg2cls.html
