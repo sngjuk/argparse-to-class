@@ -3,7 +3,7 @@
 Argparse transformation for Jupyter execution. (for quick testing in .ipynb)<br />
 Copy & paste class-transformed argument class to replace parser <br/>
 
-Currently only supports <b>add_argument</b> & <b>set_defaults </b>
+Currently only supports <b>add_argument()</b> & <b>set_defaults() </b>
 
 #### update: set_defaults & long arguments error fix. 31/Mar/18
 
