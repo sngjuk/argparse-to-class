@@ -10,14 +10,13 @@ add_argument_Patt = re.compile('add_argument')
 set_defaults_Patt = re.compile('set_defaults')
 EqualPatt = re.compile('\s{0,}=\s{0,}')
 WsPatt = re.compile('\s{0,}\n')
-
+# handling multiple white spaces.
 LpRegex = re.compile('\({1,}\s{0,}')
 RpRegex = re.compile('\s{0,}\){1,}')
 LcRegex = re.compile('\'\s{0,}')
 RcRegex = re.compile('\s{0,}\'')
 DdRegex = re.compile('\s{0,}--*')
 CmRegex = re.compile('\s{0,},\s{0,}')
-
 
 def transform():
   if len(sys.argv) <2:
@@ -86,7 +85,7 @@ def transform():
             tn = LpRegex.split(dfult[0])[1]
             tv = RpRegex.split(dfult[1])[0]
             argDct[tn]=tv
-          #Not developed funcs.
+          #future functions.
           else :
             pass
 
