@@ -22,7 +22,7 @@ NlRegexStr = '\s{0,}\n{0,}\s{0,}'
 # Argument dict : store {arg_name : value}
 argDct=OrderedDict()
 
-# Remove empty line & Concatenate the line separated argparse syntax. (skip to read)
+# Remove empty line & Concatenate the line separated argparse syntax.
 def preprocess(fname):
   try :
     with open(fname, 'r') as f:
