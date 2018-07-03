@@ -95,7 +95,6 @@ def set_defaults(arg_line):
   argDct[tn]=tv
 
 def transform(fname):
-
   # t : list() contains add_argument|set_defaults lines.
   arg_line_list = preprocess(fname)
 
@@ -104,10 +103,8 @@ def transform(fname):
     # skip none argparse syntax.
     if not ArgPatt.search(arg_line):
       continue
-    # add_argument() handling
     if add_argument_Patt.search(arg_line) :
       add_argument(arg_line)
-    #set_defaults()
     elif set_defaults_Patt.search(arg_line) :
       set_defaults(arg_line)
     #future functions.
