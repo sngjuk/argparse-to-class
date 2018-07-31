@@ -10,14 +10,18 @@ add_argument_Patt = re.compile('add_argument')
 set_defaults_Patt = re.compile('set_defaults')
 EqualPatt = re.compile('\s{0,}=\s{0,}')
 WsPatt = re.compile('\s{0,}\n')
+
 # handling multiple white spaces.
 LpRegex = re.compile('\({1,}\s{0,}')
+LpRegex2 = re.compile('\(([^\)]*)\s{0,}')
 RpRegex = re.compile('\s{0,}\){1,}')
 LcRegex = re.compile('\'\s{0,}')
 RcRegex = re.compile('\s{0,}\'')
-DdRegex = re.compile('\s{0,}--*')
+DdRegex = re.compile('\s{0,}--')
 CmRegex = re.compile('\s{0,},\s{0,}')
 NlRegexStr = '\s{0,}\n{0,}\s{0,}'
+StrRegex = re.compile('(\')(.*)(\')')
+StrRegexn = re.compile('(?<=\')(.*)(?=\')')
 
 # Argument dict : store {arg_name : value}
 argDct=OrderedDict()
@@ -38,9 +42,13 @@ def preprocess(fname):
           t[i-1] += t[i]
           t[i-1]=re.sub(NlRegexStr,'',t[i-1])
           empl.append(t[i])
+
       for d in empl:
         t.remove(d)
+      for i, line in enumerate(t):
+        t[i] = line.replace('\"', '\'')
       return t
+
   except IOError:
       print('IOError : Maybe no such file.', fname)
 
@@ -48,15 +56,16 @@ def preprocess(fname):
 def add_argument(arg_line):
   global argDct
 
-  t = LpRegex.split(arg_line)[1] # Right value from (
-  tname = RcRegex.split( LcRegex.split(t)[1] )[0] # left value of , '
-  if DdRegex.search(tname): # double dash exist.
-    tname = tname.replace('--','')
-  else :
-    return # no arg name.
-  aname = tname.replace('-','_')
+  t = LpRegex2.split(arg_line)[1] # Right value from (
+
+  argname = DdRegex.split(arg_line)[1] # Double dash regex.
+  argname = LcRegex.split(argname)[0]
+  argname = argname.replace('-', '_')
   
-  argDct[aname]=''
+  if not argname: # double dash exist.
+    return # no argument name.
+
+  argDct[argname]=''
   dtype = ''
   if('type' in t):
     dtype = EqualPatt.split(t.split('type')[1])[1]
@@ -64,26 +73,44 @@ def add_argument(arg_line):
 
   # set default value regarding with 'dtype' syntax.
   dfult = t.split('default')
+  rquird = t.split('required')
+  action = t.split('action')
+
+  tval = ''
   # default exist
   if len(dfult) > 1 :
     if (dtype in ['int','float','long']):
       tval = re.split(EqualPatt, dfult[1])[1]  
+      tval = CmRegex.split(tval)[0]
       tval = RpRegex.split(tval)[0]
+      
+      
       if LcRegex.search(tval):
         tval = LcRegex.split(tval)[1]
       tval = CmRegex.split(tval)[0]
       if RcRegex.search(tval):
         tval = RcRegex.split(tval)[0]
-      argDct[aname] = tval
-  
+        
     else:
       tval = re.split(EqualPatt, dfult[1])[1]
-      tval = RpRegex.split(tval)[0]
-      tval = CmRegex.split(tval)[0]
-      argDct[aname] = tval
+      tval = StrRegex.search(tval).group(0)
   
-  elif len(argDct[aname]) == 0 :
-      argDct[aname] = '## Default None ##' 
+  elif len(action) > 1 :
+    tval = EqualPatt.split(action[1])[1]
+    tval = StrRegexn.search(tval).group(0)
+    tval = '## action : ' + tval + ' ##'
+
+  elif len(rquird) > 1 :
+    tval = EqualPatt.split(rquird[1])[1]
+    tval = CmRegex.split(tval)[0]
+    tval = RpRegex.split(tval)[0]
+    tval = '## required : ' + tval + ' ##'
+
+  else :
+    argDct[argname] = '## Default None ##' 
+
+  if tval:
+    argDct[argname] = tval
 
 # Handling set_default()
 def set_defaults(arg_line):
