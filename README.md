@@ -5,7 +5,9 @@ Copy & paste class-transformed argument class to replace parser <br/>
 
 If you find some buggy outputs please mail me : <u> sngjuk@gmail.com </u>
 ### update : Reliability & bugfix. 13/May/18
-update: set_defaults & long arguments error fix. 31/Mar/18
+update: 
+action syntax, bool type, ('inf') syntax fixed. 5/Aug/18 
+set_defaults & long arguments error fix. 31/Mar/18
 
 ### Online quick transformation :
 http://35.192.144.192:8000/arg2cls.html
