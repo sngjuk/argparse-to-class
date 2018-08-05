@@ -8,16 +8,13 @@ import re
 ArgPatt = re.compile('add_argument|set_defaults')
 add_argument_Patt = re.compile('add_argument')
 set_defaults_Patt = re.compile('set_defaults')
-type_Patt = re.compile('int|float|complex|bool|str')
-
 EqualPatt = re.compile('\s{0,}=\s{0,}')
 WsPatt = re.compile('\s{0,}\n')
 
 # handling multiple white spaces.
 LpRegex = re.compile('\({1,}\s{0,}')
+LpRegex2 = re.compile('\(([^\)]*)\s{0,}')
 RpRegex = re.compile('\s{0,}\){1,}')
-PrRegex = re.compile('\((.*)(\))(?!.*\))') # from \( to last \)
-
 LcRegex = re.compile('\'\s{0,}')
 RcRegex = re.compile('\s{0,}\'')
 DdRegex = re.compile('\s{0,}--')
@@ -59,7 +56,7 @@ def preprocess(fname):
 def add_argument(arg_line):
   global argDct
 
-  t = PrRegex.split(arg_line)[1]
+  t = LpRegex2.split(arg_line)[1] # Right value from (
 
   argname = DdRegex.split(arg_line)[1] # Double dash regex.
   argname = LcRegex.split(argname)[0]
@@ -82,31 +79,27 @@ def add_argument(arg_line):
   tval = ''
   # default exist
   if len(dfult) > 1 :
-    # type exist
-    if (dtype in ['int','float','long','bool','complex']):
-      tval = re.split(EqualPatt, dfult[1])[1]
+    if (dtype in ['int','float','long']):
+      tval = re.split(EqualPatt, dfult[1])[1]  
       tval = CmRegex.split(tval)[0]
-
-      if type_Patt.search(tval):
-        pass
-      else :
-        if LcRegex.search(tval):
-          tval = LcRegex.split(tval)[1]
-        tval = CmRegex.split(tval)[0]
-        if RcRegex.search(tval):
-          tval = RcRegex.split(tval)[0]
-    
+      tval = RpRegex.split(tval)[0]
+      
+      
+      if LcRegex.search(tval):
+        tval = LcRegex.split(tval)[1]
+      tval = CmRegex.split(tval)[0]
+      if RcRegex.search(tval):
+        tval = RcRegex.split(tval)[0]
+        
     else:
       tval = re.split(EqualPatt, dfult[1])[1]
       tval = StrRegex.search(tval).group(0)
   
-  # action exist
   elif len(action) > 1 :
     tval = EqualPatt.split(action[1])[1]
     tval = StrRegexn.search(tval).group(0)
     tval = '## action : ' + tval + ' ##'
 
-  # required exist
   elif len(rquird) > 1 :
     tval = EqualPatt.split(rquird[1])[1]
     tval = CmRegex.split(tval)[0]
