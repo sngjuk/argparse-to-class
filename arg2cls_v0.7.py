@@ -9,7 +9,6 @@ ArgPatt = re.compile('add_argument|set_defaults')
 add_argument_Patt = re.compile('add_argument')
 set_defaults_Patt = re.compile('set_defaults')
 type_Patt = re.compile('int|float|complex|bool|str')
-
 EqualPatt = re.compile('\s{0,}=\s{0,}')
 WsPatt = re.compile('\s{0,}\n')
 
@@ -17,7 +16,6 @@ WsPatt = re.compile('\s{0,}\n')
 LpRegex = re.compile('\({1,}\s{0,}')
 RpRegex = re.compile('\s{0,}\){1,}')
 PrRegex = re.compile('\((.*)(\))(?!.*\))') # from \( to last \)
-
 LcRegex = re.compile('\'\s{0,}')
 RcRegex = re.compile('\s{0,}\'')
 DdRegex = re.compile('\s{0,}--')
@@ -25,6 +23,7 @@ CmRegex = re.compile('\s{0,},\s{0,}')
 NlRegexStr = '\s{0,}\n{0,}\s{0,}'
 StrRegex = re.compile('(\')(.*)(\')')
 StrRegexn = re.compile('(?<=\')(.*)(?=\')')
+GbgRegex = re.compile('\)[A-z0-9]')
 
 # Argument dict : store {arg_name : value}
 argDct=OrderedDict()
@@ -60,6 +59,7 @@ def add_argument(arg_line):
   global argDct
 
   t = PrRegex.split(arg_line)[1]
+  print('Pr regex : ' + str(t))
 
   argname = DdRegex.split(arg_line)[1] # Double dash regex.
   argname = LcRegex.split(argname)[0]
@@ -96,6 +96,10 @@ def add_argument(arg_line):
         if RcRegex.search(tval):
           tval = RcRegex.split(tval)[0]
 
+      if GbgRegex.search(tval):
+        tval = GbgRegex.split(tval)[0]
+    
+    # type not specified (str)
     else:
       tval = re.split(EqualPatt, dfult[1])[1]
       tval = StrRegex.search(tval).group(0)
