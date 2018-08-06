@@ -4,7 +4,7 @@ Argparse transformation for Jupyter execution. (for quick testing in .ipynb)<br 
 Copy & paste class-transformed argument class to replace parser <br/>
 
 If you find some buggy outputs please mail me : <u> sngjuk@gmail.com </u>
-### update : Reliability & bugfix. 13/May/18
+### update : 5/Aug/18
 update: 
 action syntax, bool type, ('inf') syntax fixed. 5/Aug/18 
 set_defaults & long arguments error fix. 31/Mar/18
