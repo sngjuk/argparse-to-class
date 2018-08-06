@@ -59,7 +59,7 @@ def add_argument(arg_line):
   global argDct
 
   t = PrRegex.split(arg_line)[1]
-  print('Pr regex : ' + str(t))
+# print('Pr regex : ' + str(t))
 
   argname = DdRegex.split(arg_line)[1] # Double dash regex.
   argname = LcRegex.split(argname)[0]
