@@ -6,14 +6,11 @@ import re
 
 #add_argument, set_defaults only available.
 ArgPatt = re.compile('add_argument|set_defaults')
-ArgPattNot = re.compile('add_argument_group')
 add_argument_Patt = re.compile('add_argument')
 set_defaults_Patt = re.compile('set_defaults')
 type_Patt = re.compile('int|float|complex|bool|str')
 EqualPatt = re.compile('\s{0,}=\s{0,}')
 WsPatt = re.compile('\s{0,}\n')
-TypePatt = re.compile('type\s{0,}=')
-ListPatt = re.compile("^.*\['(.*)'\].*$")
 
 # handling multiple white spaces.
 LpRegex = re.compile('\({1,}\s{0,}')
@@ -21,13 +18,12 @@ RpRegex = re.compile('\s{0,}\){1,}')
 PrRegex = re.compile('\((.*)(\))(?!.*\))') # from \( to last \)
 LcRegex = re.compile('\'\s{0,}')
 RcRegex = re.compile('\s{0,}\'')
-DdRegex = re.compile('\s{0,}-{1,}')
+DdRegex = re.compile('\s{0,}--')
 CmRegex = re.compile('\s{0,},\s{0,}')
 NlRegexStr = '\s{0,}\n{0,}\s{0,}'
 StrRegex = re.compile('(\')(.*)(\')')
 StrRegexn = re.compile('(?<=\')(.*)(?=\')')
 GbgRegex = re.compile('\)[A-z0-9]')
-DBG = False
 
 # Argument dict : store {arg_name : value}
 argDct=OrderedDict()
@@ -74,7 +70,7 @@ def add_argument(arg_line):
 
   argDct[argname]=''
   dtype = ''
-  if TypePatt.search(t):
+  if('type' in t):
     dtype = EqualPatt.split(t.split('type')[1])[1]
     dtype = CmRegex.split(dtype)[0]
 
@@ -89,17 +85,9 @@ def add_argument(arg_line):
     # type exist
     if (dtype in ['int','float','long','bool','complex']):
       tval = re.split(EqualPatt, dfult[1])[1]
+      tval = CmRegex.split(tval)[0]
 
-      if ListPatt.search(tval):
-	tval = ListPatt.search(tval)
-	if DBG:
-          print('list patt :' + str(tval))
-	pass
-      else:
-        tval = CmRegex.split(tval)[0]
-
-      if type_Patt.search(tval) or ListPatt.search(tval) :
-	print('pass2')
+      if type_Patt.search(tval):
         pass
       else :
         if LcRegex.search(tval):
@@ -109,31 +97,17 @@ def add_argument(arg_line):
           tval = RcRegex.split(tval)[0]
 
       if GbgRegex.search(tval):
-#	print('gbg')
         tval = GbgRegex.split(tval)[0]
     
     # type not specified (str)
     else:
       tval = re.split(EqualPatt, dfult[1])[1]
-
-      if DBG :
-        print('before group :', end='')
-        print(tval)
-      if ListPatt.search(tval):
-#	print('list pattt stri--')
-	tval = ListPatt.search(tval)
-      if StrRegex.search(tval):
-        tval = StrRegex.search(tval).group(0)
-    if DBG:
-      print('tval is : ' + str(tval) )
+      tval = StrRegex.search(tval).group(0)
 
   # action exist
   elif len(action) > 1 :
     tval = EqualPatt.split(action[1])[1]
-    if DBG:
-      print('tval before groupt' + str(tval))
-    if StrRegexn.search(tval):
-      tval = StrRegexn.search(tval).group(0)
+    tval = StrRegexn.search(tval).group(0)
     tval = '## action : ' + tval + ' ##'
 
   # required exist
@@ -165,9 +139,6 @@ def transform(fname):
   for i, arg_line in enumerate(arg_line_list):
 
     # skip none argparse syntax.
-    if ArgPattNot.search(arg_line):
-      continue
-
     if not ArgPatt.search(arg_line):
       continue
     if add_argument_Patt.search(arg_line) :
