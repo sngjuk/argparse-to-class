@@ -114,10 +114,10 @@ def add_argument(arg_line):
     msg_str = ''
     if action:
       tval = action.group(1)
-      msg_str = 'Action'
+      msg_str = 'action'
     else :
       tval = rquird.group(1)
-      msg_str = 'Required'
+      msg_str = 'required'
 
     regres = StrRegex.search(tval)
     if regres:
@@ -127,7 +127,7 @@ def add_argument(arg_line):
     tval = '## ' + msg_str + ' ' + tval + ' ##'
   
   else :
-    argDct[argname] = '## Default None ##'
+    argDct[argname] = '## default None ##'
 
   if tval:
     argDct[argname] = tval
