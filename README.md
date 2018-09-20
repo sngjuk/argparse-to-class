@@ -5,7 +5,7 @@ Copy & paste class-transformed argument class to replace parser <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
 ### latest update : Sept 20, 18
-Sept 20, 18 : arg name, list default values etx.. many bugs are fixed. <br>
+Sept 20, 18 : arg name, list default values etc.. many bugs are fixed. <br>
 Aug 05, 18 : action syntax, bool type, ('inf') syntax fixed.  <br>
 Mar 31, 18 : set_defaults & long arguments error fix. 
 
