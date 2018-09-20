@@ -7,8 +7,7 @@ DBG = False
 
 #add_argument, set_defaults only available.
 ListPatt = re.compile('(\[.*?\])')
-
-# handling multiple white spaces.
+GbgPatt = re.compile('(.*)\)[A-z0-9*]')
 LpRegex = re.compile('\({1,}\s{0,}')
 RpRegex = re.compile('\s{0,}\){1,}')
 PrRegex = re.compile('\((.*)(\))(?!.*\))') # from \( to last \)
@@ -92,6 +91,9 @@ def add_argument(arg_line):
 
       if not re.search('int|float|long|bool|complex', tval) and not LpRegex.search(tval):
         tval = re.split('\s{0,}\){1,}',tval)[0]
+      gbg = re.search(GbgPatt, tval)
+      if gbg:
+        tval = gbg.group(1)
 
     # type not specified str() assumed.
     else:
