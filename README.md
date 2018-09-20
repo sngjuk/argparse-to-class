@@ -4,10 +4,10 @@ Argparse transformation for Jupyter execution. (for quick testing in .ipynb)<br 
 Copy & paste class-transformed argument class to replace parser <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
-### updates
-20/Sept/18 : arg name, list default values etx.. many bug fixed.
-05/Aug/18 : action syntax, bool type, ('inf') syntax fixed.  <br>
-31/Mar/18 : set_defaults & long arguments error fix. 
+### latest update : Sept 20, 18
+Sept 20, 18 : arg name, list default values etx.. many bugs are fixed. <br>
+Aug 05, 18 : action syntax, bool type, ('inf') syntax fixed.  <br>
+Mar 31, 18 : set_defaults & long arguments error fix. 
 
 ### Online quick transformation :
 http://35.192.144.192:8000/arg2cls.html
