@@ -1,6 +1,6 @@
 # Argparse2class for Jupyter execution.
 
-Argparse transformation for Jupyter execution. (for quick testing in .ipynb)<br />
+Argparse transformation for Jupyter Notebook execution. (for quick testing in .ipynb)<br />
 Copy & paste class-transformed argument class to replace parser. <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
