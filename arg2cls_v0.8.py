@@ -17,7 +17,7 @@ StrRegex = re.compile('\'(.*?)\'')
 # Argument dict : store {arg_name : value}
 argDct=OrderedDict()
 
-# Remove empty line & Concatenate the line separated argparse syntax.
+# Remove empty line & Concatenate line-separated syntax.
 def preprocess(fname):
   try :
     with open(fname, 'r', encoding='UTF8') as f:
