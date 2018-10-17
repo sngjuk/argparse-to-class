@@ -39,7 +39,7 @@ class args:
     nhid = 200
 ```
 
-### Input (Source with argument parser or argparse lines) :
+### Input (Argparse lines) :
 
 ![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
