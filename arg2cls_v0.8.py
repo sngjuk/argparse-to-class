@@ -28,8 +28,8 @@ def preprocess(fname):
       t = [x for x in t if not re.match('\s{0,}\n',x)]
       # concatenate multiple lined arguments.
       empl = []
-      for i, z in reversed(list(enumerate(t))):
-        if i>0 and not re.search('add_argument|set_defaults', t[i]):
+      for i in range(len(t)-1, 0, -1):
+        if not re.search('add_argument|set_defaults', t[i]):
           t[i-1] += t[i]
           t[i-1]=re.sub('\s{0,}\n{0,}\s{0,}','',t[i-1])
           empl.append(t[i])
