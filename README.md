@@ -28,7 +28,6 @@ parser.add_argument('--emsize', type=int, default=200,
                     help='size of word embeddings')
 parser.add_argument('--nhid', type=int, default=200,
                     help='number of hidden units per layer')
-args = parser.parse_args()
 ```
 ### Class format
 ```
