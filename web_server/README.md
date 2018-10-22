@@ -1,7 +1,6 @@
-Simple html, php for personal webserver usage.
+Simple http page for personal usage. (arg2cls.py should located in upper folder.<br>
 
-Requirement: php <br>
-sudo apt-get install php <br>
+<b>Requirement:</b> php <br>
 <br>
 ```
 ./run_server.py
