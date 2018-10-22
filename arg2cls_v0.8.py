@@ -166,6 +166,7 @@ def transform(fname):
   print('\nclass args:')
   for i in argDct:
     print(' ',i, '=', argDct[i])
+  print()
 
 def main():
   if len(sys.argv) <2:

@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <html>
-<body>
+	<head><title> Argparse to class, arg2cls - sngjuk </title> </head>
+	<body>
 
-<b>Note:</b> May not supported in IE. <br>
-<b>Updated:</b> syntax parsing bug fix, reliable update. 13/May/18 <br>
-<b>Updated:</b> set_defaults & long arguemtns bug fix. 31/Mar/18 <br>
-<a href="https://github.com/sngjuk/Argparse_to_class">github page</a>
-<br>
-<b>add_arguement()</b> & <b>set_defaults()</b> supported only, for now. <br>
-if you find bug case, eamil me : <u>sngjuk@gamil.com</u> <br>
+		<b>Note:</b> If you find some buggy results, please publish a isssue or mail me : sngjuk@gmail.com<br>
+		<a href="https://github.com/sngjuk/Argparse_to_class">github page</a><br>
 
-<form action="/action_page.php" id="usrform"  method="post">
+		<b>Update:</b><br> 
+		Sept 20, 18 : arg name, list default values etc.. many bugs are fixed.<br>
+		Aug 5, 18 : action & required syntax ,bool type, ('inf') available.<br>
+		Mar 31, 18 : syntax parsing bug fix, reliable update. <br>
+		<br>
+		<form action="/action_page.php" id="usrform"  method="post">
 
-        <textarea rows="40" cols="70" name="comment">Enter script here..</textarea>
-        <input type="submit" value="submit">  
-</form>
+			        <textarea id=mInput rows="40" cols="70" name="comment">Enter script here..</textarea>
+				        <input id=mBtn type="submit" value="transform">  
+		</form>
 
+		<!--
+	  <script>
+		  var input = document.getElementById("mInput");
+		  input.addEventListener("keyup", function(event) {
+		          event.preventDefault();
+			          if(event.keyCode ===13) {
+				                  document.getElementById("mBtn).click();
+						          }
+							  })
+							  ;//-->
 <!--
 <button type="button" onclick="myFunction()">submit</button>
 
 <script>
-function myFunction() {
-    var x = document.getElementById("comment").value;
-    document.getElementById("demo").innerHTML = x;
-}
+	function myFunction() {
+	    var x = document.getElementById("comment").value;
+	        document.getElementById("demo").innerHTML = x;
+		}
 </script>
 
 <p id="demo"  > </p>
 //-->
-
-<b>Example Input : </b> Entire script or argparse functions (it's processing line by line) <br>
+Input Example (argparse lines) : <br>
 <p>
 parser.add_argument('--data', type=str, default='./data/penn',help='location of the data corpus')<br>
+
 parser.add_argument('--model', type=str, default='LSTM', help='type of recurrent net (RNN_TANH, RNN_RELU, LSTM, GRU)')<br>
 parser.add_argument('--emsize', type=int, default=200, help='size of word embeddings')<br>
 parser.add_argument('--nhid', type=int, default=200, help='number of hidden units per layer')<br>
 
-</body>
+	</body>
 </html>
