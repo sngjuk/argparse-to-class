@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import print_function
 from collections import OrderedDict
 import sys
 import re
@@ -58,7 +57,9 @@ def add_argument(arg_line):
   if argname:
     argname = argname.group(1).replace('-', '_')
   else :
-    return # no argument name
+    argname = StrRegex.search(arg_line).group(1)
+    if not argname:
+        return # no argument name
 
   argDct[argname]=''
   dtype = re.search(',\s*type\s*=(.*)', arg_line)
