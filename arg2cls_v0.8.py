@@ -2,7 +2,7 @@
 from collections import OrderedDict
 import sys
 import re
-DBG = True
+DBG = False
 
 #add_argument, set_defaults only available.
 ListPatt = re.compile('(\[.*?\])')
