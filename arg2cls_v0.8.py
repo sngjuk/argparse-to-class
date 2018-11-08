@@ -2,7 +2,7 @@
 from collections import OrderedDict
 import sys
 import re
-DBG = False
+DBG = True
 
 #add_argument, set_defaults only available.
 ListPatt = re.compile('(\[.*?\])')
@@ -48,7 +48,7 @@ def add_argument(arg_line):
 
   arg_line = arg_line
   if DBG:
-    print('**Pr regex : ' + str(arg_line))
+    print('in add_argument : **Pr regex : ' + str(arg_line))
 
   #argname = DdRegex.split(arg_line)[1] # Dash or regex for arg name.
   argname = re.search('\'--(.*?)\'',arg_line)
@@ -75,20 +75,24 @@ def add_argument(arg_line):
 
   tval = ''
   if dfult:
+    if DBG:
+      print('in default ext')
     # type exist
     if re.search('int|float|long|bool|complex', dtype):
       tval = dfult.group(1)
       if DBG:
-        print('temp tval :' +str(tval))
+        print('type exist tval :' +str(tval))
 
       if ListPatt.search(tval):
         tval = ListPatt.search(tval).group(1)
         if DBG:
-          print('-list patt : ' + str(tval))
+          print('list exit-list patt : ' + str(tval))
 
       # if not list, use comma as separator.
       else :
         tval = CmRegex.split(tval)[0]
+        if DBG:
+          print('not list tval :' +str(tval))
 
       if not re.search('int|float|long|bool|complex', tval) and not LpRegex.search(tval):
         tval = re.split('\s{0,}\){1,}',tval)[0]
@@ -103,15 +107,19 @@ def add_argument(arg_line):
       regres = StrRegex.match(tval)
       if regres:
         tval = regres.group(0)
-
-      if ListPatt.search(tval):
+      elif ListPatt.search(tval):
         tval = ListPatt.search(tval).group(1)
+      else:
+        tval = CmRegex.split(tval)[0]
+  
       
     if DBG:
       print('tval : ' + str(tval) +'\n')
 
   # action or required syntax exist
   elif action or rquird :
+    if DBG:
+      print('in action handling')
     msg_str = ''
     if action:
       tval = action.group(1)
