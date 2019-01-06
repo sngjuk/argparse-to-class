@@ -4,7 +4,8 @@ Argparse transformation for Jupyter Notebook execution. (for quick testing in .i
 Copy & paste class-transformed argument class to replace parser. <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
-### latest update : Nov 8, 18
+### latest update : Jan 6, 19
+Jan 6, 19 : list value after default bug fixed.
 Sept 20, 18 : arg name, list default values etc.. many bugs are fixed. <br>
 Aug 05, 18 : action syntax, bool type, ('inf') syntax fixed.  <br>
 Mar 31, 18 : set_defaults & long arguments error fix. 
