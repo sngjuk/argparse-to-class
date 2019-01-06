@@ -5,7 +5,7 @@ import re
 DBG = False
 
 #add_argument, set_defaults only available.
-ListPatt = re.compile('(\[.*?\])')
+ListPatt = re.compile('(\[.*)')
 GbgPatt = re.compile('(.*)\)[A-z0-9*]')
 LpRegex = re.compile('\({1,}\s{0,}')
 RpRegex = re.compile('\s{0,}\){1,}')
@@ -76,23 +76,22 @@ def add_argument(arg_line):
   tval = ''
   if dfult:
     if DBG:
-      print('in default ext')
+      print('default exist')
     # type exist
     if re.search('int|float|long|bool|complex', dtype):
       tval = dfult.group(1)
       if DBG:
         print('type exist tval :' +str(tval))
 
+      # if not list, use comma as separator.     
+      tval = CmRegex.split(tval)[0]
       if ListPatt.search(tval):
         tval = ListPatt.search(tval).group(1)
         if DBG:
-          print('list exit-list patt : ' + str(tval))
-
-      # if not list, use comma as separator.
+          print('list patt exist tval : ' + str(tval))
       else :
-        tval = CmRegex.split(tval)[0]
         if DBG:
-          print('not list tval :' +str(tval))
+          print('no list tval :' +str(tval))
 
       if not re.search('int|float|long|bool|complex', tval) and not LpRegex.search(tval):
         tval = re.split('\s{0,}\){1,}',tval)[0]
@@ -102,19 +101,26 @@ def add_argument(arg_line):
 
     # type not specified str() assumed.
     else:
+      if DBG:
+        print('no type exist')
       tval = dfult.group(1)
       
-      regres = StrRegex.match(tval)
+      regres = StrRegex.match(tval) #help printed?
       if regres:
         tval = regres.group(0)
-      elif ListPatt.search(tval):
-        tval = ListPatt.search(tval).group(1)
       else:
         tval = CmRegex.split(tval)[0]
-  
-      
+        if ListPatt.search(tval):
+          tval = ListPatt.search(tval).group(1)
+          if DBG:
+            print('list patt exist tval : ' + str(tval))
+        else:
+          tval = CmRegex.split(tval)[0]
+          if DBG:
+            print('no list tval : ' +str(tval))
+   
     if DBG:
-      print('tval : ' + str(tval) +'\n')
+      print('value determined : ' + str(tval) +'\n')
 
   # action or required syntax exist
   elif action or rquird :
@@ -124,7 +130,7 @@ def add_argument(arg_line):
     if action:
       tval = action.group(1)
       msg_str = 'action'
-    else :
+    else : #required.
       tval = rquird.group(1)
       msg_str = 'required'
 
