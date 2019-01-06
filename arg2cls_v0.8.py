@@ -183,7 +183,6 @@ def transform(fname):
   arg_line_list = preprocess(fname)
 
   for i, arg_line in enumerate(arg_line_list):
-
     t = PrRegex.search(arg_line)
     if t:
       t = t.group(1) # t: content of add_argument Parentheses.
