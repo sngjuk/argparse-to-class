@@ -5,7 +5,8 @@ import re
 DBG = False
 
 #add_argument, set_defaults only available.
-ListPatt = re.compile('(\[.*)')
+ListStartPatt = re.compile('(\[.*)')
+ListPatt = re.compile('(\[.*?\])')
 GbgPatt = re.compile('(.*)\)[A-z0-9*]')
 LpRegex = re.compile('\({1,}\s{0,}')
 RpRegex = re.compile('\s{0,}\){1,}')
@@ -83,34 +84,43 @@ def add_argument(arg_line):
       if DBG:
         print('type exist tval :' +str(tval))
 
-      # if not list, use comma as separator.     
-      tval = CmRegex.split(tval)[0]
-      if ListPatt.search(tval):
+      # default value handling..
+      # Check if default value has list starting patern.
+      CommaSeparated = CmRegex.split(tval)[0]
+      if ListStartPatt.search(CommaSeparated):
         tval = ListPatt.search(tval).group(1)
         if DBG:
           print('list patt exist tval : ' + str(tval))
       else :
+        tval = CmRegex.split(tval)[0]
         if DBG:
           print('no list tval :' +str(tval))
-
+      
+      # if default value is not like - int('inf') , remove characters after ')' and remove garbage.
       if not re.search('int|float|long|bool|complex', tval) and not LpRegex.search(tval):
         tval = re.split('\s{0,}\){1,}',tval)[0]
+        if DBG:
+          print('before gbg, handling paranthes')
       gbg = re.search(GbgPatt, tval)
       if gbg:
         tval = gbg.group(1)
 
-    # type not specified str() assumed.
+    # As type is not specified, we assume it as str type.
     else:
       if DBG:
         print('no type exist')
       tval = dfult.group(1)
       
-      regres = StrRegex.match(tval) #help printed?
+      # find str pattern in default value.
+      regres = StrRegex.match(tval) 
       if regres:
         tval = regres.group(0)
+      # not found.
       else:
-        tval = CmRegex.split(tval)[0]
-        if ListPatt.search(tval):
+        # default value handling..
+        # Check if default value has list starting patern.
+        CommaSeparated = CmRegex.split(tval)[0]
+        if ListStartPatt.search(CommaSeparated):
           tval = ListPatt.search(tval).group(1)
           if DBG:
             print('list patt exist tval : ' + str(tval))
@@ -118,11 +128,21 @@ def add_argument(arg_line):
           tval = CmRegex.split(tval)[0]
           if DBG:
             print('no list tval : ' +str(tval))
+
+        # if default value is not like - int('inf') , remove characters after ')' and remove garbage.
+        if not re.search('int|float|long|bool|complex', tval) and not LpRegex.search(tval):
+          tval = re.split('\s{0,}\){1,}',tval)[0]
+          if DBG:
+            print('before gbg, handling paranthes')
+        gbg = re.search(GbgPatt, tval)
+        if gbg:
+          tval = gbg.group(1)
+
    
     if DBG:
       print('value determined : ' + str(tval) +'\n')
 
-  # action or required syntax exist
+  # action or required syntaxes exist
   elif action or rquird :
     if DBG:
       print('in action handling')
