@@ -27,6 +27,7 @@ def preprocess(fname):
       # remove empty line
       t = [x for x in t if not re.match('\s{0,}\n',x)]
       # concatenate multiple lined arguments.
+      # empl : lines to be deleted from t[].
       empl = []
       for i in range(len(t)-1, 0, -1):
         if not re.search('add_argument|set_defaults', t[i]):
@@ -37,7 +38,7 @@ def preprocess(fname):
       for d in empl:
         t.remove(d)
       for i, line in enumerate(t):
-        t[i] = line.replace('\"', '\'')
+        t[i] = line.replace('\"', '\'').split('parse_args()')[0]
       return t
 
   except IOError:
