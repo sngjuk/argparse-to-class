@@ -199,11 +199,11 @@ def transform(fname):
       # Nothing to parse.
       continue
 
-  print('\nclass Argument:')
+  print('\nclass Args:')
   for i in argDct:
     print(' ',i, '=', argDct[i])
   print()
-  print('args=Argument()')
+  print('args=Args()')
 
 def main():
   if len(sys.argv) <2:
