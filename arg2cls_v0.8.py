@@ -42,7 +42,8 @@ def preprocess(fname):
       return t
 
   except IOError:
-      print('IOError : no such file.', fname)
+    print('IOError : no such file.', fname)
+    sys.exit()
 
 # Handling add_argument()
 def add_argument(arg_line):
@@ -198,10 +199,11 @@ def transform(fname):
       # Nothing to parse.
       continue
 
-  print('\nclass args:')
+  print('\nclass Argument:')
   for i in argDct:
     print(' ',i, '=', argDct[i])
   print()
+  print('args=Argument()')
 
 def main():
   if len(sys.argv) <2:
