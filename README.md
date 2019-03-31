@@ -10,8 +10,8 @@ Sept 20, 18 : arg name, list default values etc.. many bugs are fixed. <br>
 Aug 05, 18 : action syntax, bool type, ('inf') syntax fix.  <br>
 Mar 31, 18 : set_defaults & long arguments error fix. 
 
-### TODO list :
-set_default() with multiple arguments is not working properly for now.
+### Bug to fix :
+set_default() with multiple arguments is not working properly.
 
 ### Quick web transformation :
 http://35.192.144.192:8000/arg2cls.html
