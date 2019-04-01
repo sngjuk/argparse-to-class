@@ -20,9 +20,16 @@ StrRegex = re.compile(r'\'(.*?)\'')
 argDct=OrderedDict()
 
 # process 'default=' value.
-def default_value(tval):
-  # default value handling..
-  # Check if default value has list starting patern.
+def default_value(tval, dtype=''):
+  # string pattern.
+  regres = StrRegex.match(tval) 
+  if regres and not re.search('int|float|long|bool|complex', dtype):
+    if DBG:
+      print('default_value: str patt found')
+    tval = regres.group(0)
+    return tval
+
+  # typed pattern.
   CommaSeparated = CmRegex.split(tval)[0]
   if DBG:
     print('comma sepearated value:', CommaSeparated)
@@ -40,11 +47,10 @@ def default_value(tval):
 
   # if default value is not like - int('inf') , remove characters after ')' garbage chars.
   ires = RpRegex.split(tval)[0]
-  if not (re.search('int|float|long|bool|complex', ires) and LpRegex.search(ires)):
-    tval = re.split(r'\s{0,}\){1,}',tval)[0]
+  if not (re.search('int|float|long|bool|complex', ires) and re.search(r'[a-z]+\(',ires)):
     if DBG:
       print('not int("inf") format. Rp removed tval : ', tval)
-
+    tval = re.split(r'\s{0,}\){1,}',tval)[0]
     gbg = GbgPatt2.search(tval)
     if gbg:
       tval = gbg.group(1)  
@@ -69,6 +75,9 @@ def add_argument(arg_line):
   if DBG:
     print('\nin add_argument : **Pre regex: ', arg_line)
 
+  '''    
+  argument name
+  '''
   # argname = DdRegex.split(arg_line)[1] # Dash or regex for arg name.
   argname = re.search('\'--(.*?)\'', arg_line)
   if not argname:
@@ -91,7 +100,10 @@ def add_argument(arg_line):
       argname = sres.group(1)
     if not argname:
       return # no argument name 
-
+  
+  '''
+  check for syntaxes (type=, default=, required=, action=, help=, choices=)
+  '''
   dtype = ''
   dres = re.search(r',\s*type\s*=\s*(.*)', arg_line)
   if dres:
@@ -101,46 +113,41 @@ def add_argument(arg_line):
   dfult = re.search(r',\s*default\s*=\s*(.*)', arg_line)
   rquird = re.search(r',\s*required\s*=\s*(.*)', arg_line)
   action = re.search(r',\s*action\s*=\s*(.*)', arg_line)
-  help_msg = re.search(r',\s*help\s*=\'(.*?)\'', arg_line)
+  hlp = re.search(r',\s*help\s*=\s*(.*)', arg_line)
+  chice = re.search(r',\s*choices\s*=\s*(.*)', arg_line)
 
-  # temp value for argument.
+  # help message
+  hlp_msg = ''
+  if hlp:
+    thl = hlp.group(1)
+    hlp_msg = default_value(thl)
+    if hlp_msg:
+      hlp_msg = 'help='+hlp_msg
+
+  # choice message
+  choice_msg = ''
+  if chice:
+    tch = chice.group(1)
+    choice_msg = default_value(tch)
+    if choice_msg:
+      choice_msg = 'choices='+choice_msg+' '
+
+  '''
+  argument value
+  '''
+  # tval: argument value.
   tval = ''
+  # default exist.
   if dfult:
     tval = dfult.group(1)
-    if DBG:
-      print('default exist')
-
-    # type exist.
-    if re.search('int|float|long|bool|complex', dtype):  
-      if DBG:
-        print('type exist tval: ', tval)
-      tval = default_value(tval)
-
-    # As type is not specified, we assume it as str type.
-    else:
-      if DBG:
-        print('type not exist.')
-      
-      # find str pattern in default value.
-      regres = StrRegex.match(tval) 
-      if regres:
-        if DBG:
-          print('str patt found.')
-        tval = regres.group(0)
-      # not found.
-      else:
-        # default value handling..
-        # Check if default value has list starting patern.
-        tval = default_value(tval)
-   
+    tval = default_value(tval, dtype)
     if DBG:
       print('value determined : ', tval)
 
   # action or required syntaxes exist.
-  elif action or rquird :
+  elif action or rquird:
     if DBG:
       print('in action/required handling')
-
     msg_str = ''
     if action:
       tval = action.group(1)
@@ -150,20 +157,17 @@ def add_argument(arg_line):
       msg_str = 'required'
 
     tval = default_value(tval)
-    if help_msg and rquird:
-      help_msg = help_msg.group(1)
-      tval = '## ' + msg_str + ' '+tval+': \'' + help_msg + '\' ##'
-    else :
-      tval = '## ' + msg_str + ' ' + tval + ' ##'
+    tval = ' ** ' + msg_str + ' '+tval+'; '+choice_msg+ hlp_msg
 
-  else : # no default, action, required.
-    argDct[argname] = '## default not found ##'
+  # no default, action, required.
+  else : 
+    argDct[argname] = ' ** default not found; '+choice_msg+ hlp_msg
 
   # value found.
   if tval:
     argDct[argname] = tval
 
-# Handling set_default()
+# Handling set_defaults()
 def set_defaults(arg_line):
   global argDct
   if DBG:
@@ -172,8 +176,9 @@ def set_defaults(arg_line):
   # arguments to process.
   tv='' 
   # arguments of set_default()
-  SetPatt = re.compile(r'(.+=.+\))')
+  SetPatt = re.compile(r'(.+=.+\)?)')
   sres = SetPatt.search(arg_line)
+
   if sres:
     tv = sres.group(1)
     tv = tv.split(')')[0].replace(' ', '')
@@ -212,7 +217,6 @@ def set_defaults(arg_line):
       # not list format.
       else :
         tval = default_value(tval)
-
       if DBG:
         print('#set_default determined! %s: %s\n' %(tname, tval))
         print('spliter: ',tnv)
