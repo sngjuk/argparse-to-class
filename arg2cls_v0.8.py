@@ -4,18 +4,229 @@ import sys
 import re
 DBG = False
 
-#add_argument, set_defaults only available.
-ListStartPatt = re.compile('(\[.*)')
-ListPatt = re.compile('(\[.*?\])')
-GbgPatt = re.compile('(.*)\)[A-z0-9*]')
-LpRegex = re.compile('\({1,}\s{0,}')
-RpRegex = re.compile('\s{0,}\){1,}')
-PrRegex = re.compile('\((.*)(\))(?!.*\))') # from \( to last \)
-CmRegex = re.compile('\s{0,},\s{0,}')
-StrRegex = re.compile('\'(.*?)\'')
+#add_argument(), set_defaults() only available.
+ListStartPatt = re.compile(r'\s*\[.*')
+ListStartPatt2 = re.compile(r'\).*\[.*') # list out of function scope.
+ListPatt = re.compile(r'(\[.*?\])')
+GbgPatt = re.compile(r'(.*?)\)[^\)]+') # for float('inf') cmplx.
+GbgPatt2 = re.compile(r'(.*?)\).*') # general gbg, ? for non greedy.
+LpRegex = re.compile(r'\({1,}\s{0,}')
+RpRegex = re.compile(r'\s{0,}\){1,}')
+PrRegex = re.compile(r'\((.*)(\))(?!.*\))') # from \( to last \).
+CmRegex = re.compile(r'\s{0,},\s{0,}')
+StrRegex = re.compile(r'\'(.*?)\'')
 
-# Argument dict : store {arg_name : value}
+# Argument dict : {arg_name : value}
 argDct=OrderedDict()
+
+# process 'default=' value.
+def default_value(tval):
+  # default value handling..
+  # Check if default value has list starting patern.
+  CommaSeparated = CmRegex.split(tval)[0]
+  if DBG:
+    print('comma sepearated value:', CommaSeparated)
+  
+  if ListStartPatt.match(CommaSeparated) and not ListStartPatt2.match(CommaSeparated):
+    lres = ListPatt.search(tval)
+    if lres:
+      tval = lres.group(1)
+    if DBG:
+      print('list patt exist tval: ', tval)
+  else :
+    tval = CmRegex.split(tval)[0]
+    if DBG:
+      print('no list format tval: ', tval)
+
+  # if default value is not like - int('inf') , remove characters after ')' garbage chars.
+  ires = RpRegex.split(tval)[0]
+  if not (re.search('int|float|long|bool|complex', ires) and LpRegex.search(ires)):
+    tval = re.split(r'\s{0,}\){1,}',tval)[0]
+    if DBG:
+      print('not int("inf") format. Rp removed tval : ', tval)
+
+    gbg = GbgPatt2.search(tval)
+    if gbg:
+      tval = gbg.group(1)  
+      if DBG:
+        print('garbage exist & removed. tval : ', tval)
+
+  # int('inf') patt.
+  else:
+    if DBG:
+      print('type("inf") value garbaging!')
+    gbg = GbgPatt.search(tval)
+    if gbg:
+      if DBG:
+        print('garbage found, extract!')
+      tval = gbg.group(1)
+
+  return tval
+
+# Handling add_argument()
+def add_argument(arg_line):
+  global argDct
+  if DBG:
+    print('\nin add_argument : **Pre regex: ', arg_line)
+
+  # argname = DdRegex.split(arg_line)[1] # Dash or regex for arg name.
+  argname = re.search('\'--(.*?)\'', arg_line)
+  if not argname:
+    argname = re.search('\'-+(.*?)\'', arg_line)
+  
+  # dest= keyword handling.
+  dest = re.search(r',\s*dest\s*=(.*)', arg_line)
+  if dest:
+    dval = dest.group(1)
+    dval = default_value(dval)
+    argname = StrRegex.search(dval)
+
+  # hyphen(-) to underscore(_)
+  if argname:
+    argname = argname.group(1).replace('-', '_')
+  else :
+    # naive str argname.
+    sres = StrRegex.match(arg_line)
+    if sres:
+      argname = sres.group(1)
+    if not argname:
+      return # no argument name 
+
+  dtype = ''
+  dres = re.search(r',\s*type\s*=\s*(.*)', arg_line)
+  if dres:
+    dtype = dres.group(1)
+    dtype = CmRegex.split(dtype)[0]
+
+  dfult = re.search(r',\s*default\s*=\s*(.*)', arg_line)
+  rquird = re.search(r',\s*required\s*=\s*(.*)', arg_line)
+  action = re.search(r',\s*action\s*=\s*(.*)', arg_line)
+  help_msg = re.search(r',\s*help\s*=\'(.*?)\'', arg_line)
+
+  # temp value for argument.
+  tval = ''
+  if dfult:
+    tval = dfult.group(1)
+    if DBG:
+      print('default exist')
+
+    # type exist.
+    if re.search('int|float|long|bool|complex', dtype):  
+      if DBG:
+        print('type exist tval: ', tval)
+      tval = default_value(tval)
+
+    # As type is not specified, we assume it as str type.
+    else:
+      if DBG:
+        print('type not exist.')
+      
+      # find str pattern in default value.
+      regres = StrRegex.match(tval) 
+      if regres:
+        if DBG:
+          print('str patt found.')
+        tval = regres.group(0)
+      # not found.
+      else:
+        # default value handling..
+        # Check if default value has list starting patern.
+        tval = default_value(tval)
+   
+    if DBG:
+      print('value determined : ', tval)
+
+  # action or required syntaxes exist.
+  elif action or rquird :
+    if DBG:
+      print('in action/required handling')
+
+    msg_str = ''
+    if action:
+      tval = action.group(1)
+      msg_str = 'action'
+    elif rquird:
+      tval = rquird.group(1)
+      msg_str = 'required'
+
+    tval = default_value(tval)
+    if help_msg and rquird:
+      help_msg = help_msg.group(1)
+      tval = '## ' + msg_str + ' '+tval+': \'' + help_msg + '\' ##'
+    else :
+      tval = '## ' + msg_str + ' ' + tval + ' ##'
+
+  else : # no default, action, required.
+    argDct[argname] = '## default not found ##'
+
+  # value found.
+  if tval:
+    argDct[argname] = tval
+
+# Handling set_default()
+def set_defaults(arg_line):
+  global argDct
+  if DBG:
+    print('\nin set_defaults arg_line: ', arg_line)
+
+  # arguments to process.
+  tv='' 
+  # arguments of set_default()
+  SetPatt = re.compile(r'(.+=.+\))')
+  sres = SetPatt.search(arg_line)
+  if sres:
+    tv = sres.group(1)
+    tv = tv.split(')')[0].replace(' ', '')
+    if DBG:
+      print('\nset_default values: ', tv)
+
+  # one arguemnt regex.
+  SetArgPatt = re.compile(r'([^=]+=[^=,]+,?)')
+  # handling multiple set_default() arguments. (may have a bug)
+  while True:
+    if DBG:
+      print('remaining : ', tv)
+
+    nres = SetArgPatt.match(tv)
+    if nres:
+      tnv = nres.group(1)
+      if DBG:
+        print(tnv)
+      # white space already removed.
+      tname = tnv.split('=', 1)[0]
+      tval = tnv.split('=', 1)[1]
+
+      # list pattern in value. ([1, ...)
+      lres = ListStartPatt.match(tval)
+      if lres:
+        if DBG:
+          print('set_default: List patt found!')
+        # concat whole line and find complete list pattern.
+        tval+= tv.split(tnv)[1]
+        tval = ListPatt.match(tval)
+        if tval:
+          tval = tval.group(1)
+          # update spliter.
+          tnv = tname+'='+tval+','
+
+      # not list format.
+      else :
+        tval = default_value(tval)
+
+      if DBG:
+        print('#set_default determined! %s: %s\n' %(tname, tval))
+        print('spliter: ',tnv)
+
+      argDct[tname] = tval
+      
+      # split with processed argument.
+      tv = tv.split(tnv)
+      if len(tv) > 1:
+        tv = tv[1]
+      else:
+        break
+    else:
+      break
 
 # Remove empty line & Concatenate line-separated syntax.
 def preprocess(fname):
@@ -23,16 +234,18 @@ def preprocess(fname):
     with open(fname, 'r', encoding='UTF8') as f:
       txt = f.read()
       t = txt.splitlines(True)
-      t = str_list = list( filter(None, t) )
+      t = list( filter(None, t) )
+
       # remove empty line
-      t = [x for x in t if not re.match('\s{0,}\n',x)]
+      t = [x for x in t if not re.match(r'\s{0,}\n',x)]
       # concatenate multiple lined arguments.
       # empl : lines to be deleted from t[].
       empl = []
       for i in range(len(t)-1, 0, -1):
         if not re.search('add_argument|set_defaults', t[i]):
           t[i-1] += t[i]
-          t[i-1]=re.sub('\s{0,}\n{0,}\s{0,}','',t[i-1])
+          t[i-1]=re.sub(r'\n{0,}','',t[i-1])
+          t[i-1]=re.sub(r'\s{1,}',' ',t[i-1])
           empl.append(t[i])
 
       for d in empl:
@@ -45,155 +258,21 @@ def preprocess(fname):
     print('IOError : no such file.', fname)
     sys.exit()
 
-# Handling add_argument()
-def add_argument(arg_line):
-  global argDct
-
-  arg_line = arg_line
-  if DBG:
-    print('in add_argument : **Pr regex : ' + str(arg_line))
-
-  #argname = DdRegex.split(arg_line)[1] # Dash or regex for arg name.
-  argname = re.search('\'--(.*?)\'',arg_line)
-  if not argname:
-    argname = re.search('\'-+(.*?)\'',arg_line)
-  if argname:
-    argname = argname.group(1).replace('-', '_')
-  else :
-    argname = StrRegex.search(arg_line).group(1)
-    if not argname:
-        return # no argument name
-
-  argDct[argname]=''
-  dtype = re.search(',\s*type\s*=(.*)', arg_line)
-  if dtype:
-    dtype = dtype.group(1)
-    dtype = CmRegex.split(dtype)[0]
-  else :
-    dtype = ''
-
-  dfult = re.search(',\s*default\s*=(.*)',arg_line)
-  rquird = re.search(',\s*required\s*=(.*)',arg_line)
-  action = re.search(',\s*action\s*=(.*)',arg_line)
-
-  tval = ''
-  if dfult:
-    if DBG:
-      print('default exist')
-    # type exist
-    if re.search('int|float|long|bool|complex', dtype):
-      tval = dfult.group(1)
-      if DBG:
-        print('type exist tval :' +str(tval))
-
-      # default value handling..
-      # Check if default value has list starting patern.
-      CommaSeparated = CmRegex.split(tval)[0]
-      if ListStartPatt.search(CommaSeparated):
-        tval = ListPatt.search(tval).group(1)
-        if DBG:
-          print('list patt exist tval : ' + str(tval))
-      else :
-        tval = CmRegex.split(tval)[0]
-        if DBG:
-          print('no list tval :' +str(tval))
-      
-      # if default value is not like - int('inf') , remove characters after ')' and remove garbage.
-      if not re.search('int|float|long|bool|complex', tval) and not LpRegex.search(tval):
-        tval = re.split('\s{0,}\){1,}',tval)[0]
-        if DBG:
-          print('before gbg, handling paranthes')
-      gbg = re.search(GbgPatt, tval)
-      if gbg:
-        tval = gbg.group(1)
-
-    # As type is not specified, we assume it as str type.
-    else:
-      if DBG:
-        print('no type exist')
-      tval = dfult.group(1)
-      
-      # find str pattern in default value.
-      regres = StrRegex.match(tval) 
-      if regres:
-        tval = regres.group(0)
-      # not found.
-      else:
-        # default value handling..
-        # Check if default value has list starting patern.
-        CommaSeparated = CmRegex.split(tval)[0]
-        if ListStartPatt.search(CommaSeparated):
-          tval = ListPatt.search(tval).group(1)
-          if DBG:
-            print('list patt exist tval : ' + str(tval))
-        else:
-          tval = CmRegex.split(tval)[0]
-          if DBG:
-            print('no list tval : ' +str(tval))
-
-        # if default value is not like - int('inf') , remove characters after ')' and remove garbage.
-        if not re.search('int|float|long|bool|complex', tval) and not LpRegex.search(tval):
-          tval = re.split('\s{0,}\){1,}',tval)[0]
-          if DBG:
-            print('before gbg, handling paranthes')
-        gbg = re.search(GbgPatt, tval)
-        if gbg:
-          tval = gbg.group(1)
-
-   
-    if DBG:
-      print('value determined : ' + str(tval) +'\n')
-
-  # action or required syntaxes exist
-  elif action or rquird :
-    if DBG:
-      print('in action handling')
-    msg_str = ''
-    if action:
-      tval = action.group(1)
-      msg_str = 'action'
-    else : #required.
-      tval = rquird.group(1)
-      msg_str = 'required'
-
-    regres = StrRegex.search(tval)
-    if regres:
-      tval = regres.group(0)
-    else :
-      tval = CmRegex.split(tval)[0]
-    tval = '## ' + msg_str + ' ' + tval + ' ##'
-  
-  else :
-    argDct[argname] = '## default None ##'
-
-  if tval:
-    argDct[argname] = tval
-
-# Handling set_default()
-def set_defaults(arg_line):
-  global argDct
-  if DBG:
-    print('Set_defaults : ' + str(arg_line))
-
-  dfult = re.split('\s{0,}=\s{0,}', arg_line)
-  tn = dfult[0] # arg name
-  tv = RpRegex.split(dfult[1])[0] #arg value
-  argDct[tn]=tv
-
 def transform(fname):
   # t : list() contains add_argument|set_defaults lines.
   arg_line_list = preprocess(fname)
 
   for i, arg_line in enumerate(arg_line_list):
     t = PrRegex.search(arg_line)
+
     if t:
       t = t.group(1) # t: content of add_argument Parentheses.
     else :
       continue # nothing to parse.
 
-    if re.search('add_argument\s*\(', arg_line):
+    if re.search(r'add_argument\s*\(', arg_line):
       add_argument(t)
-    elif re.search('set_defaults\s*\(',arg_line):
+    elif re.search(r'set_defaults\s*\(',arg_line):
       set_defaults(t)
     else :
       # Nothing to parse.
@@ -214,8 +293,6 @@ def main():
   #handling multiple file input.
   for fname in sys.argv:
     transform(fname)
-
-# TODO : choices=, multiple keywords occurence fix.    
 
 if(__name__ == "__main__"):
   main()
