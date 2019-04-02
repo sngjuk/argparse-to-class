@@ -6,10 +6,6 @@ Copy & paste class-transformed argument class to replace parser. <br/>
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
 ### latest update : Apr 1, 19
 Apr 1, 19 : set_default() with multiple arguments, dest keyword.<br>
-Jan 6, 19 : choices syntax, last element bug fix. <br>
-Sept 20, 18 : arg name, list default values etc.. many bugs are fixed. <br>
-Aug 05, 18 : action syntax, bool type, ('inf') syntax fix.  <br>
-Mar 31, 18 : set_defaults & long arguments error fix. 
 
 ### Quick web transformation :
 http://35.192.144.192:8000/arg2cls.html
