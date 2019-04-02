@@ -120,6 +120,8 @@ def add_argument(arg_line):
   hlp_msg = ''
   if hlp:
     thl = hlp.group(1)
+    if DBG:
+      print('handling help=')
     hlp_msg = default_value(thl)
     if hlp_msg:
       hlp_msg = 'help='+hlp_msg
@@ -128,6 +130,8 @@ def add_argument(arg_line):
   choice_msg = ''
   if chice:
     tch = chice.group(1)
+    if DBG:
+      print('handling choices=')
     choice_msg = default_value(tch)
     if choice_msg:
       choice_msg = 'choices='+choice_msg+' '
@@ -177,58 +181,53 @@ def set_defaults(arg_line):
   tv='' 
   # arguments of set_default()
   SetPatt = re.compile(r'(.+=.+\)?)')
-  sres = SetPatt.search(arg_line)
-
+  sres = SetPatt.match(arg_line)
   if sres:
     tv = sres.group(1)
-    tv = tv.split(')')[0].replace(' ', '')
+    if DBG:
+      print("setPatt res: ", tv)
+    tv = re.sub(r'\s+','', tv)
     if DBG:
       print('\nset_default values: ', tv)
 
   # one arguemnt regex.
-  SetArgPatt = re.compile(r'([^=]+=[^=,]+,?)')
+  SetArgPatt = re.compile(r',?([^=]+=)[^=,]+,?')
   # handling multiple set_default() arguments. (may have a bug)
   while True:
+    tname=''
+    tval =''
+    tnv=''
+    # func closed.
+    if re.match(r',*\).*',tv):
+      tv=''
+      break
     if DBG:
-      print('remaining : ', tv)
+      print('set_default remaining: ', tv)
 
     nres = SetArgPatt.match(tv)
     if nres:
-      tnv = nres.group(1)
-      if DBG:
-        print(tnv)
-      # white space already removed.
-      tname = tnv.split('=', 1)[0]
-      tval = tnv.split('=', 1)[1]
-
-      # list pattern in value. ([1, ...)
-      lres = ListStartPatt.match(tval)
-      if lres:
-        if DBG:
-          print('set_default: List patt found!')
-        # concat whole line and find complete list pattern.
-        tval+= tv.split(tnv)[1]
-        tval = ListPatt.match(tval)
-        if tval:
-          tval = tval.group(1)
-          # update spliter.
-          tnv = tname+'='+tval+','
-
-      # not list format.
-      else :
+      tname = nres.group(1)
+      if len(tv.split(tname, 1)) > 1:
+        tval = tv.split(tname,1)[1]
         tval = default_value(tval)
-      if DBG:
-        print('#set_default determined! %s: %s\n' %(tname, tval))
-        print('spliter: ',tnv)
-
-      argDct[tname] = tval
+        tnv=tname+tval
+        tname = tname.rsplit('=',1)[0]
       
+      if DBG:
+        print('set_default tnam: ', tname)
+        print('set_default tval: ', tval)
+      if tname:
+        argDct[tname] = tval
+
       # split with processed argument.
       tv = tv.split(tnv)
       if len(tv) > 1:
         tv = tv[1]
+      # no more value to process
       else:
         break
+
+    # no arg=value pattern found.
     else:
       break
 
