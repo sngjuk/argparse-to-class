@@ -8,6 +8,8 @@ DBG = False
 ListStartPatt = re.compile(r'\s*\[.*')
 ListStartPatt2 = re.compile(r'\).*\[.*') # list out of function scope.
 ListPatt = re.compile(r'(\[.*?\])')
+RangeStartPatt = re.compile(r'\s*\(.*')
+RangePatt = re.compile(r'(\(.*?\))')
 GbgPatt = re.compile(r'(.*?)\)[^\)]+') # for float('inf') cmplx.
 GbgPatt2 = re.compile(r'(.*?)\).*') # general gbg, ? for non greedy.
 LpRegex = re.compile(r'\({1,}\s{0,}')
@@ -40,6 +42,12 @@ def default_value(tval, dtype=''):
       tval = lres.group(1)
     if DBG:
       print('list patt exist tval: ', tval)
+  elif RangeStartPatt.match(CommaSeparated):
+    rres = RangePatt.search(tval)
+    if rres:
+      tval = rres.group(1)
+      if DBG:
+        print('range patt exist tval: ', tval)
   else :
     tval = CmRegex.split(tval)[0]
     if DBG:
@@ -47,10 +55,10 @@ def default_value(tval, dtype=''):
 
   # if default value is not like - int('inf') , remove characters after ')' garbage chars.
   ires = RpRegex.split(tval)[0]
-  if not (re.search('int|float|long|bool|complex', ires) and re.search(r'[a-z]+\(',ires)):
+  if not (re.search('int|float|long|bool|complex', ires) and re.search(r'[a-z]+\(', ires) or RangePatt.match(tval)):
+    tval = re.split(r'\s{0,}\){1,}',tval)[0]
     if DBG:
       print('not int("inf") format. Rp removed tval : ', tval)
-    tval = re.split(r'\s{0,}\){1,}',tval)[0]
     gbg = GbgPatt2.search(tval)
     if gbg:
       tval = gbg.group(1)  
