@@ -7,18 +7,18 @@ If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@g
 ### latest update : Jun 17, 19
 Jun 17, 19 : fix it to handle range default value <br>
 
-### Bug to fix :
+### bug to fix :
 for now, not found.
 
-### Quick web transformation :
+### quick web transformation :
 http://35.192.144.192:8000/arg2cls.html
 
-### Usage : 
+### usage : 
 ```
 python3 arg2cls.py [target.py] [target2.py(optional)] ...
 ```
 
-### Make argument parser into-
+### make argument parser into-
 ```
 parser = argparse.ArgumentParser(description='PyTorch PennTreeBank RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/penn',
@@ -30,7 +30,7 @@ parser.add_argument('--emsize', type=int, default=200,
 parser.add_argument('--nhid', type=int, default=200,
                     help='number of hidden units per layer')
 ```
-### Class format
+### class format
 ```
 class args:
     data = './data/penn'
@@ -39,17 +39,17 @@ class args:
     nhid = 200
 ```
 
-### Input (Argparse lines) :
+### input (argparse lines) :
 
 ![alt text](http://pds27.egloos.com/pds/201709/01/00/c0134200_59a941fb9501e.png)
 
 
-### Ouput (args class) :
+### ouput (args class) :
 
 ![alt text](http://thumbnail.egloos.net/600x0/http://pds25.egloos.com/pds/201709/01/00/c0134200_59a936974c78f.png)
 
 
-### Transformed usage : 
+### transformed usage : 
 If there's no default value for argument, It will have warning value. (###manual_setting_required###)
 
 ![alt text](http://pds21.egloos.com/pds/201709/01/00/c0134200_59a937f65f737.png)
