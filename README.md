@@ -4,11 +4,11 @@ Argparse transformation for Jupyter Notebook execution. (for quick testing in .i
 Copy & paste class-transformed argument class to replace parser. <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
-### latest update : Apr 1, 19
-Apr 1, 19 : set_default() with multiple arguments, dest keyword.<br>
+### latest update : Jun 17, 19
+Jun 17, 19 : fix it to handle range default value <br>
 
 ### Bug to fix :
-default value with (x, y) set format.
+for now, not found.
 
 ### Quick web transformation :
 http://35.192.144.192:8000/arg2cls.html
