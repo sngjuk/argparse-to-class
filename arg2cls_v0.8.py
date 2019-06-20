@@ -253,7 +253,7 @@ def preprocess(fname):
       # empl : lines to be deleted from t[].
       empl = []
       for i in range(len(t)-1, 0, -1):
-        if not re.search('add_argument|set_defaults', t[i]):
+        if not re.search('add_argument|add_option|set_defaults', t[i]):
           t[i-1] += t[i]
           t[i-1]=re.sub(r'\n{0,}','',t[i-1])
           t[i-1]=re.sub(r'\s{1,}',' ',t[i-1])
@@ -281,9 +281,9 @@ def transform(fname):
     else :
       continue # nothing to parse.
 
-    if re.search(r'add_argument\s*\(', arg_line):
+    if re.search(r'add_argument\s*\(|add_option\s*\(', arg_line):
       add_argument(t)
-    elif re.search(r'set_defaults\s*\(',arg_line):
+    elif re.search(r'set_defaults\s*\(', arg_line):
       set_defaults(t)
     else :
       # Nothing to parse.
