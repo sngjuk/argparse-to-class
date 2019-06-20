@@ -4,8 +4,8 @@ Argparse transformation for Jupyter Notebook execution. (for quick testing in .i
 Copy & paste class-formatted arguments to replace argparse. <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
-### latest update : Jun 17, 19
-Jun 17, 19 : fix it to handle range default value <br>
+### latest update : Jun 20, 19
+Jun 20, 19 : fix it add_option() available <br>
 
 ### bug to fix :
 for now, not found.
