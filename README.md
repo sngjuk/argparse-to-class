@@ -5,7 +5,7 @@ Copy & paste class-formatted arguments to replace argparse. <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
 ### latest update : Jun 20, 19
-Jun 20, 19 : fix it add_option() available <br>
+Jun 20, 19 : add_option() available <br>
 
 ### bug to fix :
 for now, not found.
