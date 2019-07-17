@@ -8,7 +8,7 @@ If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@g
 Jun 20, 19 : add_option() available <br>
 
 ### bug to fix :
-for now, not found.
+some default values with parentheses, (float('Inf') and range values are currently supported)
 
 ### quick web transformation :
 http://35.192.144.192:8000/arg2cls.html
