@@ -4,15 +4,14 @@ Argparse transformation for Jupyter Notebook execution. (for quick testing in .i
 Copy & paste class-formatted arguments to replace argparse. <br/>
 
 If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
-### latest update : Jun 20, 19
+### latest update : Aug 30, 19
+Aug 30, 19 : server is resumed <br>
 Jun 20, 19 : add_option() available <br>
 
 ### bug to fix :
 some default values with parentheses, (float('Inf') and range values are currently supported)
 
 ### quick web transformation :
-Server is not working properly now,
-it will be fixed soon
 http://35.192.144.192:8000/arg2cls.html
 
 ### usage : 
