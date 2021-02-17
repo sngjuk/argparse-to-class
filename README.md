@@ -3,13 +3,7 @@
 Argparse transformation for Jupyter Notebook execution. (for quick testing in .ipynb)<br />
 Copy & paste class-formatted arguments to replace argparse. <br/>
 
-If you find some buggy outputs, please publish a issue or mail me : <u> sngjuk@gmail.com </u>
-### latest update : Aug 30, 19
-Aug 30, 19 : server is resumed <br>
-Jun 20, 19 : add_option() available <br>
-
-### bug to fix :
-some default values with parentheses, (float('Inf') and range values are currently supported)
+<b>Notice!</b> It's better to use ```args = parser.parse_args(args=[])``` syntax - <a href="https://stackoverflow.com/a/47587545/3618853">https://stackoverflow.com/a/47587545/3618853</a><br>
 
 ### quick web transformation :
 http://35.192.144.192:8000/arg2cls.html
